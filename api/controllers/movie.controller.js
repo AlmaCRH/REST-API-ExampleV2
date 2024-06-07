@@ -1,4 +1,5 @@
 const Movie = require("../models/movie.model");
+const Actor = require("../models/actor.model");
 
 const getAllMovies = async (request, response) => {
   // Función para traer todos los usuarios de la base de datos
@@ -64,10 +65,32 @@ const deleteMovie = async (request, response) => {
   }
 };
 
+const addActorToMovie = async (request, response) => {
+  try {
+    const movieId = request.params.id;
+    const movie = await Movie.findByPk(movieId);
+
+    if (!movie) {
+      return response.status(404).json({ error: "Movie not found" });
+    }
+
+    const actor = await Actor.findOne({
+      where: {
+        id: request.params.actorId,
+      },
+    });
+    await movie.addActor(actor);
+    return response.status(200).json(movie);
+  } catch (error) {
+    return response.status(500).send(error);
+  }
+};
+
 module.exports = {
   getAllMovies,
   getMovie,
   createMovie,
   updateMovie,
   deleteMovie,
+  addActorToMovie,
 };

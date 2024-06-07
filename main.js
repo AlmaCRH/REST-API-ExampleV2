@@ -1,6 +1,6 @@
 const { checkConnection, syncModels } = require("./db/db"); //Importamos las funciones para conectarnos a la base de datos y la instancia de sequelize
-const User = require("./api/models/user.model"); //Nos importamos el modelo de User
-const Movie = require("./api/models/movie.model");
+const addRelationsToModels = require("./db/relations")
+
 
 const express = require("express"); //Importamos express
 const morgan = require("morgan"); //Importamos morgan para obtener información de nuestras peticiones
@@ -8,6 +8,7 @@ const port = 3000; //Definimos una variable con el puerto que queremos usar con 
 
 const checkAndSync = async () => {
   await checkConnection();
+  addRelationsToModels()
   await syncModels();
 };
 
